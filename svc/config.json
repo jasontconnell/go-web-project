@@ -1,0 +1,4 @@
+{
+    "connectionstring": "mongodb://db:27017",
+    "database": "packages"
+}

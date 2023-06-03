@@ -1,0 +1,20 @@
+version: "3.6"
+services:
+  svc:
+    build: ./svc
+    ports: 
+      - "32379"
+    environment:
+      - PORT=32379
+    depends_on:
+      - "db"
+  web:
+    build: ./web
+    volumes:
+      - ./web/static:/work/static
+    ports:
+      - "32379:80"
+    depends_on: 
+      - "svc"
+  db:
+    build: ./db
