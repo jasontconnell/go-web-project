@@ -6,8 +6,7 @@ services:
       - "32379"
     environment:
       - PORT=32379
-    depends_on:
-      - "db"
+      - devmode=true
   web:
     build: ./web
     volumes:
@@ -16,5 +15,3 @@ services:
       - "32379:80"
     depends_on: 
       - "svc"
-  db:
-    build: ./db

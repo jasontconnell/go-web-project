@@ -4,21 +4,16 @@ import (
 	"html/template"
 	"log"
 	"net/http"
-
-	"github.com/gorilla/mux"
-	"github.com/jasontconnell/go-web-project/conf"
-	"github.com/jasontconnell/go-web-project/data"
-	"github.com/jasontconnell/repository/v2"
 )
 
 type SiteHandler struct {
 	http.Handler
-	tmpl *template.Template
-	repo data.PackageRepo
+	tmpl    *template.Template
+	devmode bool
 }
 
 func (s *SiteHandler) Template() *template.Template {
-	if s.tmpl != nil {
+	if s.tmpl != nil && !s.devmode {
 		return s.tmpl
 	}
 
@@ -35,20 +30,16 @@ func (s *SiteHandler) Template() *template.Template {
 	return s.tmpl
 }
 
-func GetHandler(cfg conf.Config) *SiteHandler {
+func GetHandler(devmode bool) *SiteHandler {
 	h := new(SiteHandler)
 
-	var repo *data.PackageMongoRepo
-	repo = new(data.PackageMongoRepo)
-	repo.Initialize(repository.Configuration{ConnectionString: cfg.ConnectionString, Database: cfg.Database})
-	h.repo = repo
+	h.devmode = devmode
 
-	m := mux.NewRouter()
-	m.StrictSlash(true)
+	m := http.NewServeMux()
 
 	// posts
-	m.HandleFunc("/", h.Index)
-	m.HandleFunc("/api/test", h.ApiTest)
+	m.HandleFunc("GET /", h.Index)
+	m.HandleFunc("GET /api/test", h.ApiTest)
 	h.Handler = m
 	return h
 }
