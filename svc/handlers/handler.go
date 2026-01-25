@@ -4,11 +4,15 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+
+	"github.com/jasontconnell/go-web-project/app"
+	"github.com/jasontconnell/go-web-project/data"
 )
 
 type SiteHandler struct {
 	http.Handler
 	tmpl    *template.Template
+	app     *app.App
 	devmode bool
 }
 
@@ -34,6 +38,8 @@ func GetHandler(devmode bool) *SiteHandler {
 	h := new(SiteHandler)
 
 	h.devmode = devmode
+	repos := data.GetRepos(h.devmode)
+	h.app = app.NewApp(repos, devmode)
 
 	m := http.NewServeMux()
 

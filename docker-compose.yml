@@ -7,6 +7,8 @@ services:
     environment:
       - PORT=32379
       - devmode=true
+    volumes:
+      - ./svc/template:/work/template
   web:
     build: ./web
     volumes:
