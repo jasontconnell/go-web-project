@@ -1,0 +1,9 @@
+#jtml [Main]
+ #head
+  #css
+  #js
+ 
+ #body [body]
+  #container 
+   Hello, World!
+  #footer

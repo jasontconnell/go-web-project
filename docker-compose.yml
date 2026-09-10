@@ -1,11 +1,10 @@
-version: "3.6"
 services:
   svc:
     build: ./svc
     ports: 
-      - "32379"
+      - "%port%"
     environment:
-      - PORT=32379
+      - PORT=%port%
       - devmode=true
     volumes:
       - ./svc/template:/work/template
@@ -14,6 +13,6 @@ services:
     volumes:
       - ./web/static:/work/static
     ports:
-      - "32379:80"
+      - "%port%:80"
     depends_on: 
       - "svc"

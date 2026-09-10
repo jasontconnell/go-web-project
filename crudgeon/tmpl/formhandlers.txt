@@ -1,0 +1,3 @@
+{{ range $obj := .Objects }}
+    {{if objbitflag $obj "createurl" }}{{ objstringflag $obj "createurl" }}{{ end }}
+{{ end }}

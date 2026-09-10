@@ -1,0 +1,30 @@
+{{ $obj := .Object }}
+
+<h2>{{ objstringflag $obj "title" }}</h2>
+
+<input type="hidden" name="createUrl" value="{{ objstringflag $obj "createurl" }}" />
+
+<form id="{{$obj.NameLower}}_edit">
+{{- range $fld := $obj.Fields }}
+    <div class="mb-3">
+        <div class="form-control">
+            <label for="{{ $fld.NameLower}}" class="form-label">{{ $fld.Name }}</label>
+            {{- if eq (fldstringflag $fld "component") "text"}}
+            <input type="text" class="form-control" id="{{$fld.NameLower}}" name="{{$fld.NameLower}}" />
+            {{- else if eq (fldstringflag $fld "component") "richtext" }}
+            <input type="hidden" id="{{ $fld.NameLower}}" name="{{ $fld.NameLower}}" />
+            <div id="editor" style="height: 600px"></div>
+            {{- else if eq (fldstringflag $fld "component") "datepicker" }}
+            <input type="date" class="form-control" id="{{$fld.NameLower}}" name="{{$fld.NameLower}}" />
+            {{- else if eq (fldstringflag $fld "component") "ratingsinput" }}
+            #forms/ratingsinput [{{ $fld.NameLower }}]
+            {{- else if eq (fldstringflag $fld "component") "number" }}
+            <input type="number" class="form-control" id="{{$fld.NameLower}}" name="{{$fld.NameLower}}" />
+            {{- else if eq (fldstringflag $fld "component") "color" }}
+            <input type="color" class="form-control" id="{{$fld.NameLower}}" name="{{$fld.NameLower}}" />
+            {{- end }}
+        </div>
+    </div>
+{{- end }}
+    <input class="btn btn-primary" id="btnSave" type="submit" value="Submit" />
+</form>

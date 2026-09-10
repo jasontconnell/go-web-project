@@ -1,4 +1,4 @@
-FROM golang:1.20.4-alpine as stage
+FROM golang:%goversion%-alpine as stage
 
 WORKDIR /work/
 COPY go.* ./

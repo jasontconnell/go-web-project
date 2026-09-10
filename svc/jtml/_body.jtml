@@ -1,0 +1,5 @@
+@open 
+<body class="$1">
+
+@close
+</body>

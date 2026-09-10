@@ -1,0 +1,92 @@
+package {{.Namespace}}
+
+import (
+    "fmt"
+
+    "github.com/jasontconnell/jsondb"
+)
+
+const (
+{{- range .Objects }}
+	{{.NameLower}}Filename string = "./json/{{.NameLower}}.json"
+{{- end }}
+)
+
+{{- range .Objects }}
+type json{{.Name}}Repo_gen struct {
+    {{.NameLower}}db jsondb.Database[{{.Name}}]
+}
+
+type cloud{{.Name}}Repo_gen struct {
+}
+{{ end }}
+
+{{- range .Objects }}
+{{- $obj := . }}
+type {{.Name}}Repo_Gen interface {
+    Get{{.Name}}({{ range $index, $field := .KeyFields }}{{$field.NameLower}} {{$field.Type}}{{- if lt (plus1 $index) (len $obj.KeyFields)}},{{end}}{{end}}) ({{.Name}}, error)
+    Save{{.Name}}(item {{.Name}}) error
+    Delete{{.Name}}(item {{.Name}}) error
+    GetAll() ([]{{.Name}}, error)
+}
+{{- end }}
+
+{{- range .Objects }}
+{{- $obj := . }}
+func (r *json{{.Name}}Repo_gen) Get{{.Name}}({{ range $index, $field := .KeyFields }}{{$field.NameLower}} {{$field.Type}}{{- if lt (plus1 $index) (len $obj.KeyFields)}},{{end}}{{end}}) ({{.Name}}, error) {
+    item, found := r.{{.NameLower}}db.FindFirst(func (item {{.Name}}) bool {
+        m := false
+        {{- range $index, $field := .KeyFields }}
+        m = m || {{$field.NameLower}} == item.{{$field.Name}}
+        {{- end}}
+        return m
+    })
+
+    if !found {
+        return item, fmt.Errorf("{{.Name}} not found {{ range $index, $field := .KeyFields }}%v{{- if lt (plus1 $index) (len $obj.KeyFields)}},{{end}}{{end}}", {{ range $index, $field := .KeyFields }}{{$field.NameLower}}{{- if lt (plus1 $index) (len $obj.KeyFields)}},{{end}}{{end}})
+    }
+
+    return item, nil
+}
+
+func (r *json{{.Name}}Repo_gen) Save{{.Name}}(item {{.Name}}) error {
+    if r.{{.NameLower}}db.Exists(func (fitem {{.Name}}) bool {
+        m := false
+        {{- range $index, $field := .KeyFields }}
+        m = m || item.{{$field.Name}} == fitem.{{$field.Name}}
+        {{- end}}
+        return m
+    }) {
+        r.{{.NameLower}}db.Update(func (fitem {{.Name}}) bool {
+            m := false
+            {{- range $index, $field := .KeyFields }}
+            m = m || item.{{$field.Name}} == fitem.{{$field.Name}}
+            {{- end}}
+            return m
+        }, item)
+    } else {
+        r.{{.NameLower}}db.Add(item)
+    }
+    return nil
+}
+
+func (r *json{{.Name}}Repo_gen) Delete{{.Name}}(item {{.Name}}) error {
+    _, removed :=  r.{{.NameLower}}db.Remove(func (fitem {{.Name}}) bool {
+        m := false
+        {{- range $index, $field := .KeyFields }}
+        m = m || item.{{$field.Name}} == fitem.{{$field.Name}}
+        {{- end}}
+        return m
+    })
+
+    if !removed {
+        return fmt.Errorf("{{.Name}} not found {{ range $index, $field := .KeyFields }}%v{{- if lt (plus1 $index) (len $obj.KeyFields)}},{{end}}{{end}}", {{ range $index, $field := .KeyFields }}item.{{$field.Name}}{{- if lt (plus1 $index) (len $obj.KeyFields)}},{{end}}{{end}})
+    }
+
+    return nil
+}
+
+func (r *json{{.Name}}Repo_gen) GetAll() ([]{{.Name}}, error) {
+    return r.{{.NameLower}}db.All(), nil
+}
+{{- end }}

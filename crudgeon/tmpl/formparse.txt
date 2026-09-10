@@ -1,0 +1,19 @@
+package forms
+
+
+{{- if gt (len .Imports) 0 }}
+import (
+{{- range .Imports }}
+    {{.}}
+{{- end }}
+)
+{{- end }}
+
+{{- range .Objects }}
+type {{.Name}}Form struct {
+    Token
+    {{- range $index,$field := .Fields }}
+    {{$field.Name}} {{ if $field.IsBaseType }}{{$field.Type}}{{else if $field.Collection}}[]string{{end}} `form:"{{$field.NameLower}}" json:"{{$field.NameLower}}"`
+    {{- end }}
+}
+{{ end }}

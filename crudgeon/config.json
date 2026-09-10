@@ -1,0 +1,72 @@
+{
+    "generations": [
+        { "file": "tmpl\\class.txt", "ext": "go", "filenameTemplate": "data_gen", "folder": "./svc/data", "namespace": "data", "flags": "+collections,+fields","objdir":false,"oneFile":true},
+        { "file": "tmpl\\repo.txt", "ext": "go", "filenameTemplate": "repo_gen", "folder": "./svc/data", "namespace": "data", "flags": "+collections,+fields,+keys","objdir":false,"oneFile": true, "conditionFlag": "-form"},
+        { "file": "tmpl\\app.txt", "ext": "go", "filenameTemplate": "app_gen", "folder": "./svc/app", "namespace": "app", "flags": "+collections,+fields,+keys","objdir":false,"oneFile": true, "conditionFlag": "-form"},
+        { "file": "tmpl\\handlers.txt", "ext": "go", "filenameTemplate": "handler_gen", "folder": "./svc/handlers", "namespace": "handlers", "flags": "+collections,+fields,+keys","objdir":false,"oneFile": true, "conditionFlag": "+form"},
+        { "file": "tmpl\\formparse.txt", "ext": "go", "filenameTemplate": "form_gen", "folder": "./svc/handlers/forms","namespace":"forms","flags":"+collections,+fields,+keys,-skipform","objdir":false,"oneFile": true, "conditionFlag": "+form"},
+        { "file": "tmpl\\formhtml.txt", "ext": "jtml", "filenameTemplate": "_{{.NameLower}}", "folder": "./svc/jtml/forms","namespace":"forms","flags":"+collections,+fields,+keys,-skipform","objdir":false,"oneFile": false, "conditionFlag": "+form"}
+    ],
+    "collectionTemplate": "[]{{.Name}}",
+    "null": "nil",
+    "dbnull": "null",
+    "typeMap": [
+        {
+            "name": "int",
+            "codeType": "int",
+            "dbType": "int",
+            "codeDefault": "0",
+            "dbDefault": "0"
+        },
+        {
+            "name": "string",
+            "codeType": "string",
+            "dbType": "varchar(150)",
+            "codeDefault": "\"\"",
+            "dbDefault": "''"
+        },
+        {
+            "name": "DateTime",
+            "codeType": "time.Time",
+            "dbType": "datetime",
+            "codeDefault": "time.Time{}",
+            "dbDefault": "null",
+            "import": "\"time\""
+        },
+        {
+            "name": "decimal",
+            "codeType": "float64",
+            "dbType": "decimal(18,7)",
+            "codeDefault": "0",
+            "dbDefault": "0"
+        },
+        {
+            "name": "double",
+            "codeType": "float64",
+            "dbType": "decimal(18,7)",
+            "codeDefault": "0",
+            "dbDefault": "0"
+        },
+        {
+            "name": "short",
+            "codeType": "uint8",
+            "dbType": "smallint",
+            "codeDefault": "0",
+            "dbDefault": "0"
+        },
+        {
+            "name": "long",
+            "codeType": "int64",
+            "dbType": "bigint",
+            "codeDefault": "0",
+            "dbDefault": "0"
+        },
+        {
+            "name": "bool",
+            "codeType": "bool",
+            "dbType": "bit",
+            "codeDefault": "0",
+            "dbDefault": "0"
+        }
+    ]
+}

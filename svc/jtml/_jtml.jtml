@@ -1,0 +1,8 @@
+@open
+{{- define "$1" -}}
+<!DOCTYPE html>
+<html lang="en">
+
+@close
+</html>
+{{ end }}

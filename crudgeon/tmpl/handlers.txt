@@ -1,0 +1,27 @@
+package {{.Namespace}}
+
+import (
+    "log"
+    "net/http"
+
+    "github.com/jasontconnell/formparse"
+    "github.com/jasontconnell/go-web-project/handlers/forms"
+)
+
+func (s *SiteHandler) registerFormHandlers(m *http.ServeMux) {
+    {{- range $obj := .Objects }}
+        {{ if objbitflag $obj "createurl"}}
+        m.HandleFunc("POST {{ objstringflag $obj "createurl" }}", s.doSave{{$obj.Name}})
+        {{ end }}
+    {{ end }}
+}
+
+{{- range $obj := .Objects }}
+{{ if objbitflag $obj "createurl"}}
+func (s *SiteHandler) doSave{{.Name}}(w http.ResponseWriter, req *http.Request) {
+    frm := formparse.ParseForm[forms.{{.Name}}Form](req)
+
+    log.Println(frm)
+}
+{{ end }}
+{{ end }}

@@ -1,0 +1,5 @@
+package {{.Namespace}}
+
+{{ range $obj := .Objects }}
+    
+{{ end }}
