@@ -1,2 +1,5 @@
-go install github.com/jasontconnell/crudgeon/cmd/crudgeon@latest
-go install github.com/jasontconnell/jtml/cmd/jtml@latest
+cd svc
+go get -tool github.com/jasontconnell/crudgeon/cmd/crudgeon@latest
+go get -tool github.com/jasontconnell/jtml/cmd/jtml@latest
+
+cd ..
